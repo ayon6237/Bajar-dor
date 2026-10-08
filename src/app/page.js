@@ -1,5 +1,6 @@
 
 import Hero from '@/components/Hero';
+import PriceSections from '@/components/IncreasePriceSection';
 import Marquee from '@/components/Marquee';
 import React from 'react';
 
@@ -8,6 +9,7 @@ const page = () => {
     <div>
       <Marquee />
       <Hero />
+      <PriceSections />
     </div>
   );
 };
