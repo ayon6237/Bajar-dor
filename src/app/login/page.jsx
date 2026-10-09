@@ -14,6 +14,7 @@ export default function LoginPage() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState("");
   const [error, setError] = useState("");
 
   function handleChange(e) {
@@ -25,6 +26,7 @@ export default function LoginPage() {
     }));
   }
 
+  // Email and password login
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -46,7 +48,6 @@ export default function LoginPage() {
         return;
       }
 
-      // Login সফল হলে home page-এ যাবে
       router.replace("/");
       router.refresh();
     } catch (err) {
@@ -59,6 +60,21 @@ export default function LoginPage() {
       setLoading(false);
     }
   }
+
+  // Google and GitHub login
+  const googleSignIn = async() =>{
+    const data = await authClient.signIn.social({
+    provider: "google",
+  });
+  }
+
+  const githubLogin = async ()=>{
+     const data = await authClient.signIn.social({
+        provider: "github"
+    })
+  }
+
+  const isBusy = loading || Boolean(socialLoading);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-[#f0f5f0] px-4 py-8">
@@ -94,7 +110,8 @@ export default function LoginPage() {
               onChange={handleChange}
               required
               autoComplete="email"
-              className="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100"
+              disabled={isBusy}
+              className="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100 disabled:opacity-60"
             />
           </div>
 
@@ -116,7 +133,8 @@ export default function LoginPage() {
               onChange={handleChange}
               required
               autoComplete="current-password"
-              className="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100"
+              disabled={isBusy}
+              className="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100 disabled:opacity-60"
             />
           </div>
 
@@ -130,10 +148,10 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Login Button */}
+          {/* Email Login Button */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={isBusy}
             className="w-full rounded-lg bg-green-700 py-3 text-sm font-bold text-white shadow-md transition hover:bg-green-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "লগইন হচ্ছে..." : "সাইন ইন"}
@@ -141,51 +159,74 @@ export default function LoginPage() {
         </form>
 
         {/* Divider */}
-        <div className="my-4 flex items-center gap-3">
+        <div className="my-5 flex items-center gap-3">
           <div className="h-px flex-1 bg-gray-200" />
 
-          <span className="text-xs text-gray-500">
-            অথবা
-          </span>
+          <span className="text-xs text-gray-500">অথবা</span>
 
           <div className="h-px flex-1 bg-gray-200" />
         </div>
 
-        {/* Social Login */}
-        <div className="grid grid-cols-2 gap-2">
-          {/* Google */}
+        {/* Social Login Buttons */}
+        <div className="space-y-3">
+          {/* Google Login */}
           <button
             type="button"
-            onClick={() =>
-              alert("Google authentication এখনো সেটআপ করা হয়নি।")
-            }
-            className="flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-2 py-2.5 text-xs font-semibold text-gray-700 transition hover:bg-gray-50"
+            onClick={googleSignIn}
+            disabled={isBusy}
+            className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-200 bg-white px-3 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <span className="text-base font-bold text-blue-600">
-              G
-            </span>
+            <svg
+              viewBox="0 0 48 48"
+              className="h-5 w-5 shrink-0"
+              aria-hidden="true"
+            >
+              <path
+                fill="#EA4335"
+                d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z"
+                transform="translate(0 5)"
+              />
 
-            Google দিয়ে চালিয়ে যান
+              <path
+                fill="#4285F4"
+                d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.72 7.18l7.64 5.93c4.46-4.13 7.12-10.2 7.12-17.58Z"
+              />
+
+              <path
+                fill="#FBBC05"
+                d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.52 2.56 10.78l7.97-6.19Z"
+              />
+
+              <path
+                fill="#34A853"
+                d="M24 48c6.48 0 11.93-2.13 15.9-5.78l-7.64-5.93c-2.12 1.42-4.84 2.26-8.26 2.26-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z"
+              />
+            </svg>
+
+            {socialLoading === "google"
+              ? "Google-এ সংযোগ হচ্ছে..."
+              : "Google দিয়ে চালিয়ে যান"}
           </button>
 
-          {/* GitHub */}
+          {/* GitHub Login */}
           <button
             type="button"
-            onClick={() =>
-              alert("GitHub authentication এখনো সেটআপ করা হয়নি।")
-            }
-            className="flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-2 py-2.5 text-xs font-semibold text-gray-700 transition hover:bg-gray-50"
+            onClick={githubLogin}
+            disabled={isBusy}
+            className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-200 bg-white px-3 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-4 w-4 shrink-0"
+              className="h-5 w-5 shrink-0"
               fill="currentColor"
               aria-hidden="true"
             >
               <path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.1c-3.1.68-3.76-1.32-3.76-1.32-.5-1.3-1.24-1.65-1.24-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.62 1.22 3.26.93.1-.72.4-1.22.71-1.5-2.48-.28-5.09-1.24-5.09-5.5 0-1.22.44-2.22 1.16-3-.12-.28-.5-1.42.11-2.97 0 0 .95-.3 3.05 1.15a10.6 10.6 0 0 1 5.56 0c2.1-1.45 3.05-1.15 3.05-1.15.61 1.55.23 2.69.11 2.97.72.78 1.16 1.78 1.16 3 0 4.27-2.61 5.21-5.1 5.49.4.35.75 1.02.75 2.06v3.12c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z" />
             </svg>
 
-            GitHub দিয়ে চালিয়ে যান
+            {socialLoading === "github"
+              ? "GitHub-এ সংযোগ হচ্ছে..."
+              : "GitHub দিয়ে চালিয়ে যান"}
           </button>
         </div>
 
