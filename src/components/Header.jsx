@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React from "react";
 import Navlinks from "./Navlinks";
+import Link from "next/link";
 
 const Header = () => {
   const date = new Date().toLocaleDateString("bn-BD", {
@@ -37,13 +38,17 @@ const Header = () => {
 
      
         <div className="flex items-center gap-2">
-          <button className="rounded-lg border cursor-pointer border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+         <Link href="/login">
+             <button className="rounded-lg border cursor-pointer border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
             সাইন ইন
           </button>
+         </Link>
 
-          <button className="rounded-lg cursor-pointer bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700">
+          <Link href="/register">
+            <button className="rounded-lg cursor-pointer bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700">
             সাইন আপ
           </button>
+          </Link>
         </div>
 
       </div>

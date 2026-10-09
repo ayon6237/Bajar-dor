@@ -16,7 +16,7 @@ const Navlinks = async () => {
           {data.map((item) => (
             <Link
               key={item.id}
-              href={item.slug}
+              href={`/category/${item.slug}`}
               className="
                 group flex shrink-0 items-center gap-1.5
                 rounded-full border border-gray-200
