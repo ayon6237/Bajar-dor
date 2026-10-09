@@ -8,7 +8,7 @@ const Navlinks = async () => {
 
   try {
     const res = await fetch(API_URL, {
-      cache: "no-store",
+     cache: "force-cache",
     });
 
     if (!res.ok) {

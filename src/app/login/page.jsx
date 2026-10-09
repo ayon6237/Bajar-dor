@@ -1,28 +1,63 @@
-
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   function handleChange(e) {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    // এখানে তোমার login API যুক্ত করবে
-    console.log("Login data:", formData);
-    alert("Login API এখনো যুক্ত করা হয়নি।");
+    setError("");
+    setLoading(true);
+
+    try {
+      const result = await authClient.signIn.email({
+        email: formData.email,
+        password: formData.password,
+        callbackURL: "/",
+      });
+
+      if (result.error) {
+        setError(
+          result.error.message ||
+            "লগইন করা যায়নি। ইমেইল ও পাসওয়ার্ড যাচাই করো।"
+        );
+        return;
+      }
+
+      // Login সফল হলে home page-এ যাবে
+      router.replace("/");
+      router.refresh();
+    } catch (err) {
+      console.error("Login error:", err);
+
+      setError(
+        "সার্ভারের সঙ্গে যোগাযোগ করা যায়নি। আবার চেষ্টা করো।"
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -76,7 +111,7 @@ export default function LoginPage() {
               id="password"
               name="password"
               type="password"
-              placeholder="কমপক্ষে ৬ অক্ষর"
+              placeholder="তোমার পাসওয়ার্ড লিখো"
               value={formData.password}
               onChange={handleChange}
               required
@@ -85,36 +120,60 @@ export default function LoginPage() {
             />
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div
+              role="alert"
+              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700"
+            >
+              {error}
+            </div>
+          )}
+
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full rounded-lg bg-green-700 py-3 text-sm font-bold text-white shadow-md transition hover:bg-green-800 active:scale-[0.99]"
+            disabled={loading}
+            className="w-full rounded-lg bg-green-700 py-3 text-sm font-bold text-white shadow-md transition hover:bg-green-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            সাইন ইন
+            {loading ? "লগইন হচ্ছে..." : "সাইন ইন"}
           </button>
         </form>
 
         {/* Divider */}
         <div className="my-4 flex items-center gap-3">
           <div className="h-px flex-1 bg-gray-200" />
-          <span className="text-xs text-gray-500">অথবা</span>
+
+          <span className="text-xs text-gray-500">
+            অথবা
+          </span>
+
           <div className="h-px flex-1 bg-gray-200" />
         </div>
 
         {/* Social Login */}
         <div className="grid grid-cols-2 gap-2">
+          {/* Google */}
           <button
             type="button"
-            onClick={() => alert("Google authentication সেটআপ করতে হবে।")}
+            onClick={() =>
+              alert("Google authentication এখনো সেটআপ করা হয়নি।")
+            }
             className="flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-2 py-2.5 text-xs font-semibold text-gray-700 transition hover:bg-gray-50"
           >
-            <span className="text-base font-bold text-blue-600">G</span>
+            <span className="text-base font-bold text-blue-600">
+              G
+            </span>
+
             Google দিয়ে চালিয়ে যান
           </button>
 
+          {/* GitHub */}
           <button
             type="button"
-            onClick={() => alert("GitHub authentication সেটআপ করতে হবে।")}
+            onClick={() =>
+              alert("GitHub authentication এখনো সেটআপ করা হয়নি।")
+            }
             className="flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-2 py-2.5 text-xs font-semibold text-gray-700 transition hover:bg-gray-50"
           >
             <svg
@@ -125,6 +184,7 @@ export default function LoginPage() {
             >
               <path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.1c-3.1.68-3.76-1.32-3.76-1.32-.5-1.3-1.24-1.65-1.24-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.62 1.22 3.26.93.1-.72.4-1.22.71-1.5-2.48-.28-5.09-1.24-5.09-5.5 0-1.22.44-2.22 1.16-3-.12-.28-.5-1.42.11-2.97 0 0 .95-.3 3.05 1.15a10.6 10.6 0 0 1 5.56 0c2.1-1.45 3.05-1.15 3.05-1.15.61 1.55.23 2.69.11 2.97.72.78 1.16 1.78 1.16 3 0 4.27-2.61 5.21-5.1 5.49.4.35.75 1.02.75 2.06v3.12c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z" />
             </svg>
+
             GitHub দিয়ে চালিয়ে যান
           </button>
         </div>

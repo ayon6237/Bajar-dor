@@ -1,22 +1,19 @@
+
 import Image from "next/image";
-import React from "react";
+import CurrentDate from "./CurrentDate";
 
 const Hero = () => {
-  const date = new Date().toLocaleDateString("bn-BD", {
-    dateStyle: "full",
-  });
-
   return (
     <section className="bg-white">
       <div className="container mx-auto max-w-[1200px] px-4 py-10 sm:py-14 lg:py-16">
         <div className="grid items-center gap-10 md:grid-cols-2 lg:gap-16">
-
           {/* Left Content */}
           <div className="order-2 md:order-1">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-100 bg-green-50 px-3 py-1.5">
-              <span className="h-2 w-2 rounded-full bg-green-500"></span>
+              <span className="h-2 w-2 rounded-full bg-green-500" />
+
               <p className="text-xs font-medium text-green-700">
-                {date}
+                <CurrentDate />
               </p>
             </div>
 
@@ -41,8 +38,6 @@ const Hero = () => {
                 সব পণ্য দেখুন
                 <span aria-hidden="true">→</span>
               </a>
-
-              
             </div>
           </div>
 
@@ -60,7 +55,6 @@ const Hero = () => {
               />
             </div>
           </div>
-
         </div>
       </div>
     </section>

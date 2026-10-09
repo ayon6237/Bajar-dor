@@ -1,10 +1,17 @@
-
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function RegisterPage() {
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,22 +20,87 @@ export default function RegisterPage() {
   });
 
   function handleChange(e) {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErrorMessage("");
+    setSuccessMessage("");
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("পাসওয়ার্ড দুটি মিলছে না!");
+    if (loading) return;
+
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+
+    if (!name) {
+      setErrorMessage("আপনার নাম লিখুন।");
       return;
     }
 
-    console.log("Registration data:", formData);
-    alert("ফর্ম সফলভাবে সাবমিট হয়েছে!");
+    if (!email) {
+      setErrorMessage("আপনার ইমেইল লিখুন।");
+      return;
+    }
+
+    if (formData.password.length < 8) {
+  setErrorMessage(
+    "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।"
+  );
+  return;
+}
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage(
+        "পাসওয়ার্ড এবং কনফার্ম পাসওয়ার্ড মিলছে না।"
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const result = await authClient.signUp.email({
+        name,
+        email,
+        password: formData.password,
+        callbackURL: "/login",
+      });
+
+      if (result.error) {
+        setErrorMessage(
+          result.error.message ||
+            "নিবন্ধন করা যায়নি। আবার চেষ্টা করুন।"
+        );
+        return;
+      }
+
+      setSuccessMessage(
+        "আপনার অ্যাকাউন্ট তৈরি হয়েছে। Login page-এ নেওয়া হচ্ছে..."
+      );
+
+      router.push("/login");
+      router.refresh();
+    } catch (error) {
+      console.error("Registration error:", error);
+
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "নিবন্ধনের সময় সমস্যা হয়েছে। আবার চেষ্টা করুন।"
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -40,12 +112,32 @@ export default function RegisterPage() {
         </h1>
 
         <p className="mt-2 text-xs text-gray-500">
-          বিনা ঝামেলায় সহজে আপনার অ্যাকাউন্ট তৈরি করুন।
+          সহজেই আপনার অ্যাকাউন্ট তৈরি করুন।
         </p>
       </div>
 
       {/* Register Card */}
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white/80 p-5 shadow-sm sm:p-7">
+      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
+        {/* Error Message */}
+        {errorMessage && (
+          <div
+            role="alert"
+            className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600"
+          >
+            {errorMessage}
+          </div>
+        )}
+
+        {/* Success Message */}
+        {successMessage && (
+          <div
+            role="status"
+            className="mb-4 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-700"
+          >
+            {successMessage}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
           <div>
@@ -63,8 +155,10 @@ export default function RegisterPage() {
               placeholder="যেমন: রহিম উদ্দিন"
               value={formData.name}
               onChange={handleChange}
+              autoComplete="name"
               required
-              className="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100"
+              disabled={loading}
+              className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100 disabled:bg-gray-100"
             />
           </div>
 
@@ -84,8 +178,10 @@ export default function RegisterPage() {
               placeholder="you@example.com"
               value={formData.email}
               onChange={handleChange}
+              autoComplete="email"
               required
-              className="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100"
+              disabled={loading}
+              className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100 disabled:bg-gray-100"
             />
           </div>
 
@@ -106,8 +202,10 @@ export default function RegisterPage() {
               minLength={6}
               value={formData.password}
               onChange={handleChange}
+              autoComplete="new-password"
               required
-              className="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100"
+              disabled={loading}
+              className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100 disabled:bg-gray-100"
             />
           </div>
 
@@ -124,57 +222,27 @@ export default function RegisterPage() {
               id="confirmPassword"
               name="confirmPassword"
               type="password"
-              placeholder="আবার লিখুন"
+              placeholder="আবার পাসওয়ার্ড লিখুন"
               value={formData.confirmPassword}
               onChange={handleChange}
+              autoComplete="new-password"
               required
-              className="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100"
+              disabled={loading}
+              className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100 disabled:bg-gray-100"
             />
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full rounded-lg bg-green-700 py-3 text-sm font-bold text-white shadow-md transition hover:bg-green-800 active:scale-[0.99]"
+            disabled={loading}
+            className="w-full rounded-lg bg-green-700 py-3 text-sm font-bold text-white shadow-md transition hover:bg-green-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            অ্যাকাউন্ট তৈরি করুন
+            {loading
+              ? "অ্যাকাউন্ট তৈরি হচ্ছে..."
+              : "অ্যাকাউন্ট তৈরি করুন"}
           </button>
         </form>
-
-        {/* Divider */}
-        <div className="my-4 flex items-center gap-3">
-          <div className="h-px flex-1 bg-gray-200" />
-          <span className="text-xs text-gray-500">অথবা</span>
-          <div className="h-px flex-1 bg-gray-200" />
-        </div>
-
-        {/* Social Buttons */}
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={() => alert("Google authentication সেটআপ করতে হবে।")}
-            className="flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-2 py-2.5 text-xs font-semibold text-gray-700 transition hover:bg-gray-50"
-          >
-            <span className="font-bold text-base text-blue-600">G</span>
-            Google দিয়ে চালিয়ে যান
-          </button>
-
-          <button
-            type="button"
-            onClick={() => alert("GitHub authentication সেটআপ করতে হবে।")}
-            className="flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-2 py-2.5 text-xs font-semibold text-gray-700 transition hover:bg-gray-50"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-4 w-4"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.1c-3.1.68-3.76-1.32-3.76-1.32-.5-1.3-1.24-1.65-1.24-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.62 1.22 3.26.93.1-.72.4-1.22.71-1.5-2.48-.28-5.09-1.24-5.09-5.5 0-1.22.44-2.22 1.16-3-.12-.28-.5-1.42.11-2.97 0 0 .95-.3 3.05 1.15a10.6 10.6 0 0 1 5.56 0c2.1-1.45 3.05-1.15 3.05-1.15.61 1.55.23 2.69.11 2.97.72.78 1.16 1.78 1.16 3 0 4.27-2.61 5.21-5.1 5.49.4.35.75 1.02.75 2.06v3.12c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z" />
-            </svg>
-            GitHub দিয়ে চালিয়ে যান
-          </button>
-        </div>
 
         {/* Login Link */}
         <p className="mt-5 text-center text-xs text-gray-600">
@@ -188,7 +256,7 @@ export default function RegisterPage() {
         </p>
       </div>
 
-      {/* Bottom Text */}
+      {/* Home Link */}
       <Link
         href="/"
         className="mt-5 text-xs text-gray-500 transition hover:text-green-700"

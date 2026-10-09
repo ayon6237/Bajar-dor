@@ -1,8 +1,9 @@
 
 import CategoryContent from "./CategoryContent";
 
-const API_URL =
-  "https://api.abcz.workers.dev/api/bazardor";
+export const instant = false;
+
+const API_URL = "https://api.abcz.workers.dev/api/bazardor";
 
 export default async function CategoryPage({ params }) {
   const { category } = await params;
@@ -13,7 +14,9 @@ export default async function CategoryPage({ params }) {
     }),
     fetch(
       `${API_URL}/products?category=${encodeURIComponent(category)}`,
-      { cache: "no-store" }
+      {
+        cache: "no-store",
+      }
     ),
   ]);
 
@@ -21,18 +24,22 @@ export default async function CategoryPage({ params }) {
     throw new Error("পণ্যের তথ্য লোড করা যায়নি।");
   }
 
-  const categoryData = await categoryRes.json();
-  const productData = await productRes.json();
+  const [categoryData, productData] = await Promise.all([
+    categoryRes.json(),
+    productRes.json(),
+  ]);
 
   const categories = Array.isArray(categoryData)
     ? categoryData
-    : categoryData.categories || [];
+    : Array.isArray(categoryData?.categories)
+      ? categoryData.categories
+      : [];
 
   const products = Array.isArray(productData)
     ? productData
-    : Array.isArray(productData.products)
+    : Array.isArray(productData?.products)
       ? productData.products
-      : Array.isArray(productData.data)
+      : Array.isArray(productData?.data)
         ? productData.data
         : [];
 
