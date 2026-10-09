@@ -140,16 +140,11 @@ export default function CategoryContent({
               </h1>
 
               <p className="mt-1 text-sm text-gray-500">
-                মোট {toBengaliNumber(products.length)}টি পণ্য
+                মোট {toBengaliNumber(products.length)}টি পণ্যের আজকের দাম ও পরিবর্তন
               </p>
             </div>
           </div>
 
-          <div className="mt-5 border-t border-gray-100 pt-4">
-            <h2 className="text-lg font-bold text-gray-900">
-              ৪টি পণ্যের আজকের দাম ও পরিবর্তন
-            </h2>
-          </div>
         </div>
 
         {/* 2. Sorting Options */}
@@ -172,6 +167,8 @@ export default function CategoryContent({
             </option>
           </select>
         </div>
+
+        <h2>মোট {toBengaliNumber(products.length)} পণ্য দেখানো হচ্ছে</h2>
 
         {/* 3. Products Grid */}
         <div>
