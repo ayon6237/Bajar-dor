@@ -2,6 +2,7 @@ import Image from "next/image";
 import Navlinks from "./Navlinks";
 import CurrentDate from "./CurrentDate";
 import AuthNavActions from "@/components/AuthNavActions";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -12,7 +13,8 @@ const Header = () => {
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           {/* Logo */}
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-green-50 sm:h-11 sm:w-11 sm:rounded-xl">
-            <Image
+            <Link href="/">
+                <Image
               height={50}
               width={50}
               className="h-8 w-8 object-contain sm:h-10 sm:w-10"
@@ -20,6 +22,8 @@ const Header = () => {
               alt="বাজার দর"
               priority
             />
+            </Link>
+            
           </div>
 
           {/* Website Name and Date */}
