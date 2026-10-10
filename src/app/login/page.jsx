@@ -79,43 +79,13 @@ function LoginForm() {
   }
 
   // Google and GitHub login
-  async function handleSocialLogin(provider) {
-    setError("");
-    setSocialLoading(provider);
-
-    try {
-      const result = await authClient.signIn.social({
-        provider,
-        callbackURL,
-      });
-
-      if (result?.error) {
-        const message =
-          result.error.message ||
-          `${provider} দিয়ে লগইন করা যায়নি।`;
-
-        setError(message);
-        toast.error(message);
-        setSocialLoading("");
-      }
-    } catch (err) {
-      console.error(`${provider} login error:`, err);
-
-      const message =
-        `${provider} দিয়ে লগইন করতে সমস্যা হয়েছে। আবার চেষ্টা করো।`;
-
-      setError(message);
-      toast.error(message);
-      setSocialLoading("");
-    }
+  const handleGoogleSignIn = async ()=>{
+    const data = await authClient.signIn.social({
+      provider:"google"
+    })
   }
 
-  const handleGithubSignIn = async ()=>{
-    const result = await authClient.signIn.social({
-        provider:"github",
-        callbackURL,
-      });
-  }
+  
 
   const isBusy = loading || Boolean(socialLoading);
 
@@ -213,7 +183,7 @@ function LoginForm() {
           {/* Google Login */}
           <button
             type="button"
-            onClick={() => handleSocialLogin("google")}
+            onClick={handleGoogleSignIn}
             disabled={isBusy}
             className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-3 text-center text-xs font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 sm:gap-3 sm:text-sm"
           >
@@ -254,7 +224,7 @@ function LoginForm() {
           {/* GitHub Login */}
           <button
             type="button"
-            onClick={handleGithubSignIn}
+            onClick={() => handleSocialLogin("github")}
             disabled={isBusy}
             className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-3 text-center text-xs font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 sm:gap-3 sm:text-sm"
           >

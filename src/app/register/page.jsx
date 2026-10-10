@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -80,28 +81,39 @@ export default function RegisterPage() {
 
       if (result.error) {
         showError(
-          result.error.message || "নিবন্ধন করা যায়নি। আবার চেষ্টা করুন।",
+          result.error.message ||
+            "নিবন্ধন করা যায়নি। আবার চেষ্টা করুন।"
         );
         return;
       }
 
+      // Signup-এর পরে Better Auth session তৈরি করলে
+      // সেটি বন্ধ করে আলাদা login বাধ্যতামূলক করছি।
+      const signOutResult = await authClient.signOut();
+
+      if (signOutResult.error) {
+        setErrorMessage(
+          "অ্যাকাউন্ট তৈরি হয়েছে, কিন্তু স্বয়ংক্রিয় সেশন বন্ধ করা যায়নি। পেজটি refresh করে আবার চেষ্টা করুন।"
+        );
+        toast.error("সেশন বন্ধ করা যায়নি।");
+        return;
+      }
+
       const message =
-        "আপনার অ্যাকাউন্ট তৈরি হয়েছে। Login page-এ নেওয়া হচ্ছে...";
+        "অ্যাকাউন্ট তৈরি হয়েছে। এখন আপনার ইমেইল ও পাসওয়ার্ড দিয়ে সাইন ইন করুন।";
 
       setSuccessMessage(message);
       toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!");
 
-      setTimeout(() => {
-        router.push("/login?registered=1");
-        router.refresh();
-      }, 800);
+      router.replace("/login?registered=1");
+      router.refresh();
     } catch (error) {
       console.error("Registration error:", error);
 
       showError(
         error instanceof Error
           ? error.message
-          : "নিবন্ধনের সময় সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+          : "নিবন্ধনের সময় সমস্যা হয়েছে। আবার চেষ্টা করুন।"
       );
     } finally {
       setLoading(false);
@@ -121,7 +133,6 @@ export default function RegisterPage() {
       </div>
 
       <div className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6 md:p-8">
-        {/* Error Message */}
         {errorMessage && (
           <div
             role="alert"
@@ -142,13 +153,9 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
           <div>
-            <label
-              htmlFor="name"
-              className="mb-1.5 block text-xs font-semibold text-gray-700 sm:text-sm"
-            >
+            <label htmlFor="name" className="mb-1.5 block text-xs font-semibold text-gray-700 sm:text-sm">
               নাম
             </label>
-
             <input
               id="name"
               name="name"
@@ -164,13 +171,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label
-              htmlFor="email"
-              className="mb-1.5 block text-xs font-semibold text-gray-700 sm:text-sm"
-            >
+            <label htmlFor="email" className="mb-1.5 block text-xs font-semibold text-gray-700 sm:text-sm">
               ইমেইল
             </label>
-
             <input
               id="email"
               name="email"
@@ -186,13 +189,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="mb-1.5 block text-xs font-semibold text-gray-700 sm:text-sm"
-            >
+            <label htmlFor="password" className="mb-1.5 block text-xs font-semibold text-gray-700 sm:text-sm">
               পাসওয়ার্ড
             </label>
-
             <input
               id="password"
               name="password"
@@ -209,13 +208,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label
-              htmlFor="confirmPassword"
-              className="mb-1.5 block text-xs font-semibold text-gray-700 sm:text-sm"
-            >
+            <label htmlFor="confirmPassword" className="mb-1.5 block text-xs font-semibold text-gray-700 sm:text-sm">
               পাসওয়ার্ড নিশ্চিত করুন
             </label>
-
             <input
               id="confirmPassword"
               name="confirmPassword"

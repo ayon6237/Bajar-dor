@@ -23,7 +23,7 @@ const db = client.db("Bajar-Dor");
 
 const trustedOrigins = [
   "http://localhost:3000",
-  "https://bajar-dor-jade.vercel.app"
+  "https://bajar-dor-jade.vercel.app",
 ].filter(Boolean);
 
 export const auth = betterAuth({
@@ -42,13 +42,11 @@ export const auth = betterAuth({
   },
 
   account: {
-  accountLinking: {
-    enabled: true,
-    trustedProviders: ["github", "google"],
-    disableImplicitLinking: false,
-    requireLocalEmailVerified: false,
+    accountLinking: {
+      enabled: true,
+      trustedProviders: ["github", "google"],
+    },
   },
-},
 
   socialProviders: {
     google: {
