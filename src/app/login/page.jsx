@@ -110,6 +110,13 @@ function LoginForm() {
     }
   }
 
+  const handleGithubSignIn = async ()=>{
+    const result = await authClient.signIn.social({
+        provider:"github",
+        callbackURL,
+      });
+  }
+
   const isBusy = loading || Boolean(socialLoading);
 
   return (
@@ -247,7 +254,7 @@ function LoginForm() {
           {/* GitHub Login */}
           <button
             type="button"
-            onClick={() => handleSocialLogin("github")}
+            onClick={handleGithubSignIn}
             disabled={isBusy}
             className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-3 text-center text-xs font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 sm:gap-3 sm:text-sm"
           >
