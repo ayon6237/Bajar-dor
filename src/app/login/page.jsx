@@ -210,7 +210,7 @@ function LoginForm() {
             type="button"
             onClick={() => handleSocialLogin("google")}
             disabled={isBusy}
-            className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-3 text-center text-xs font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 sm:gap-3 sm:text-sm"
+            className="cursor-pointer flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-3 text-center text-xs font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 sm:gap-3 sm:text-sm"
           >
             <svg
               viewBox="0 0 48 48"
@@ -251,7 +251,7 @@ function LoginForm() {
             type="button"
             onClick={() => handleSocialLogin("github")}
             disabled={isBusy}
-            className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-3 text-center text-xs font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 sm:gap-3 sm:text-sm"
+            className="cursor-pointer flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-3 text-center text-xs font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 sm:gap-3 sm:text-sm"
           >
             <svg
               viewBox="0 0 24 24"
