@@ -1,9 +1,10 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const NavlinksClient = ({ categories }) => {
+export default function NavlinksClient({ categories = [] }) {
   const pathname = usePathname();
 
   return (
@@ -12,7 +13,6 @@ const NavlinksClient = ({ categories }) => {
         <div className="flex gap-1.5 overflow-x-auto py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {categories.map((item) => {
             const href = `/category/${item.slug}`;
-
             const isActive = pathname === href;
 
             return (
@@ -42,6 +42,4 @@ const NavlinksClient = ({ categories }) => {
       </div>
     </nav>
   );
-};
-
-export default NavlinksClient;
+}

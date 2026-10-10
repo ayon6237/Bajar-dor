@@ -1,10 +1,10 @@
+
+import { Suspense } from "react";
 import NavlinksClient from "./NavlinksClient";
 
 const API_URL = "https://api.abcz.workers.dev/api/bazardor/categories";
 
-const Navlinks = async () => {
-  let categories = [];
-
+async function getCategories() {
   try {
     const res = await fetch(API_URL, {
       cache: "force-cache",
@@ -16,16 +16,35 @@ const Navlinks = async () => {
 
     const data = await res.json();
 
-    categories = Array.isArray(data)
+    return Array.isArray(data)
       ? data
-      : Array.isArray(data.categories)
+      : Array.isArray(data?.categories)
         ? data.categories
         : [];
   } catch (error) {
     console.error("Categories fetch failed:", error);
+    return [];
   }
+}
 
-  return <NavlinksClient categories={categories} />;
-};
+export default async function Navlinks() {
+  const categories = await getCategories();
 
-export default Navlinks;
+  return (
+    <Suspense
+      fallback={
+        <nav className="bg-white">
+          <div className="mx-auto w-full max-w-[1200px] px-3 sm:px-4">
+            <div className="flex gap-2 overflow-hidden py-3">
+              <div className="h-8 w-20 animate-pulse rounded-full bg-gray-100" />
+              <div className="h-8 w-24 animate-pulse rounded-full bg-gray-100" />
+              <div className="h-8 w-20 animate-pulse rounded-full bg-gray-100" />
+            </div>
+          </div>
+        </nav>
+      }
+    >
+      <NavlinksClient categories={categories} />
+    </Suspense>
+  );
+}
