@@ -44,4 +44,4 @@ function ProductsLoading() {
     </main>
   );
 }
-export default ProductsLoading
+export default ProductsLoading;

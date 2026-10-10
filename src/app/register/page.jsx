@@ -80,8 +80,7 @@ export default function RegisterPage() {
 
       if (result.error) {
         showError(
-          result.error.message ||
-            "নিবন্ধন করা যায়নি। আবার চেষ্টা করুন।"
+          result.error.message || "নিবন্ধন করা যায়নি। আবার চেষ্টা করুন।",
         );
         return;
       }
@@ -102,7 +101,7 @@ export default function RegisterPage() {
       showError(
         error instanceof Error
           ? error.message
-          : "নিবন্ধনের সময় সমস্যা হয়েছে। আবার চেষ্টা করুন।"
+          : "নিবন্ধনের সময় সমস্যা হয়েছে। আবার চেষ্টা করুন।",
       );
     } finally {
       setLoading(false);
@@ -111,7 +110,6 @@ export default function RegisterPage() {
 
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center bg-[#f0f5f0] px-3 py-8 sm:px-6 sm:py-10">
-      {/* Heading */}
       <div className="mb-5 w-full max-w-md text-center sm:mb-6">
         <h1 className="text-2xl font-extrabold leading-tight text-gray-800 sm:text-3xl">
           অ্যাকাউন্ট তৈরি করুন
@@ -122,7 +120,6 @@ export default function RegisterPage() {
         </p>
       </div>
 
-      {/* Register Card */}
       <div className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6 md:p-8">
         {/* Error Message */}
         {errorMessage && (
@@ -134,7 +131,6 @@ export default function RegisterPage() {
           </div>
         )}
 
-        {/* Success Message */}
         {successMessage && (
           <div
             role="status"
@@ -145,7 +141,6 @@ export default function RegisterPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-          {/* Name */}
           <div>
             <label
               htmlFor="name"
@@ -168,7 +163,6 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Email */}
           <div>
             <label
               htmlFor="email"
@@ -191,7 +185,6 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label
               htmlFor="password"
@@ -215,7 +208,6 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Confirm Password */}
           <div>
             <label
               htmlFor="confirmPassword"
@@ -238,19 +230,15 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
             className="flex min-h-11 w-full items-center justify-center rounded-lg bg-green-700 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-green-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 sm:text-base"
           >
-            {loading
-              ? "অ্যাকাউন্ট তৈরি হচ্ছে..."
-              : "অ্যাকাউন্ট তৈরি করুন"}
+            {loading ? "অ্যাকাউন্ট তৈরি হচ্ছে..." : "অ্যাকাউন্ট তৈরি করুন"}
           </button>
         </form>
 
-        {/* Login Link */}
         <p className="mt-5 text-center text-xs leading-6 text-gray-600 sm:text-sm">
           অ্যাকাউন্ট আছে?{" "}
           <Link
@@ -262,7 +250,6 @@ export default function RegisterPage() {
         </p>
       </div>
 
-      {/* Home Link */}
       <Link
         href="/"
         className="mt-5 inline-flex min-h-10 items-center justify-center px-3 text-xs text-gray-500 transition hover:text-green-700 sm:text-sm"

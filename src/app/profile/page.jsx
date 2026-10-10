@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -43,8 +42,7 @@ export default function ProfilePage() {
       });
 
       if (result.error) {
-        const errorText =
-          result.error.message || "নাম আপডেট করা যায়নি।";
+        const errorText = result.error.message || "নাম আপডেট করা যায়নি।";
 
         setError(errorText);
         toast.error(errorText);
@@ -59,7 +57,6 @@ export default function ProfilePage() {
 
       toast.success(successText);
 
-      // Updated session data আনার চেষ্টা
       await authClient.getSession();
       router.refresh();
     } catch (err) {
@@ -84,8 +81,7 @@ export default function ProfilePage() {
       const result = await authClient.signOut();
 
       if (result.error) {
-        const errorText =
-          result.error.message || "Sign out করা যায়নি।";
+        const errorText = result.error.message || "Sign out করা যায়নি।";
 
         setError(errorText);
         toast.error(errorText);
@@ -111,9 +107,7 @@ export default function ProfilePage() {
   if (isPending) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#f0f5f0] px-4">
-        <p className="text-sm text-gray-500">
-          Profile loading হচ্ছে...
-        </p>
+        <p className="text-sm text-gray-500">Profile loading হচ্ছে...</p>
       </main>
     );
   }
@@ -159,7 +153,6 @@ export default function ProfilePage() {
   return (
     <main className="min-h-screen bg-[#f0f5f0] px-4 py-10 sm:py-14">
       <div className="mx-auto max-w-3xl">
-        {/* Back to Home */}
         <Link
           href="/"
           className="mb-6 inline-flex text-sm font-medium text-gray-500 transition hover:text-green-700"
@@ -167,7 +160,6 @@ export default function ProfilePage() {
           ← হোম পেজে ফিরে যাও
         </Link>
 
-        {/* Page Heading */}
         <div className="mb-7">
           <p className="text-sm font-semibold text-green-700">
             BAZARDOR ACCOUNT
@@ -182,9 +174,7 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        {/* Profile Card */}
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-          {/* Profile Header */}
           <div className="bg-gradient-to-r from-green-800 to-green-600 px-6 py-8 sm:px-8">
             <div className="flex flex-col items-center gap-4 sm:flex-row">
               {user.image ? (
@@ -200,9 +190,7 @@ export default function ProfilePage() {
               )}
 
               <div className="text-center sm:text-left">
-                <h2 className="text-2xl font-bold text-white">
-                  {displayName}
-                </h2>
+                <h2 className="text-2xl font-bold text-white">{displayName}</h2>
 
                 <p className="mt-1 break-all text-sm text-green-50">
                   {user.email}
@@ -215,7 +203,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Account Details */}
           <div className="p-6 sm:p-8">
             <div className="mb-6 flex items-center justify-between gap-3">
               <h3 className="text-lg font-bold text-gray-800">
@@ -238,7 +225,6 @@ export default function ProfilePage() {
               )}
             </div>
 
-            {/* Success Message */}
             {message && (
               <p
                 role="status"
@@ -248,7 +234,6 @@ export default function ProfilePage() {
               </p>
             )}
 
-            {/* Error Message */}
             {error && (
               <p
                 role="alert"
@@ -258,12 +243,8 @@ export default function ProfilePage() {
               </p>
             )}
 
-            {/* Edit Profile Form */}
             {editing ? (
-              <form
-                onSubmit={handleUpdateProfile}
-                className="space-y-4"
-              >
+              <form onSubmit={handleUpdateProfile} className="space-y-4">
                 <div>
                   <label
                     htmlFor="name"
@@ -311,9 +292,7 @@ export default function ProfilePage() {
             ) : (
               <div className="space-y-5">
                 <div className="rounded-xl bg-gray-50 p-4">
-                  <p className="text-xs font-medium text-gray-500">
-                    Full Name
-                  </p>
+                  <p className="text-xs font-medium text-gray-500">Full Name</p>
 
                   <p className="mt-2 break-words text-sm font-semibold text-gray-800">
                     {user.name || "নাম যোগ করা হয়নি"}
@@ -336,9 +315,7 @@ export default function ProfilePage() {
                   </p>
 
                   <p className="mt-2 text-sm font-semibold text-gray-800">
-                    {user.emailVerified
-                      ? "Verified"
-                      : "Not verified"}
+                    {user.emailVerified ? "Verified" : "Not verified"}
                   </p>
                 </div>
 
@@ -354,7 +331,6 @@ export default function ProfilePage() {
               </div>
             )}
 
-            {/* Sign Out */}
             <div className="mt-8 border-t border-gray-100 pt-6">
               <button
                 type="button"
@@ -367,9 +343,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-
-        {/* Footer */}
-       
       </div>
     </main>
   );

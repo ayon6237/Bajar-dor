@@ -1,8 +1,6 @@
-
 import Link from "next/link";
 
-const API_URL =
-  "https://api.abcz.workers.dev/api/bazardor/products";
+const API_URL = "https://api.abcz.workers.dev/api/bazardor/products";
 
 function toBengaliNumber(value) {
   return new Intl.NumberFormat("bn-BD", {
@@ -21,7 +19,6 @@ function getUnit(unit) {
 
   return units[unit] || "প্রতি কেজি";
 }
-
 
 function getChangeInfo(change) {
   const direction = change?.dir || "flat";
@@ -47,7 +44,6 @@ function getChangeInfo(change) {
   };
 }
 
-
 function ProductCard({ item }) {
   const changeInfo = getChangeInfo(item.change);
 
@@ -67,14 +63,10 @@ function ProductCard({ item }) {
             {item.nameBn}
           </h3>
 
-          <p className="mt-1 text-sm text-gray-500">
-            {getUnit(item.unit)}
-          </p>
+          <p className="mt-1 text-sm text-gray-500">{getUnit(item.unit)}</p>
 
           {item.categoryNameBn && (
-            <p className="mt-1 text-xs text-gray-400">
-              {item.categoryNameBn}
-            </p>
+            <p className="mt-1 text-xs text-gray-400">{item.categoryNameBn}</p>
           )}
         </div>
       </div>
@@ -82,15 +74,11 @@ function ProductCard({ item }) {
       {/* Today's Price and Price Change */}
       <div className="mt-4 flex items-end justify-between gap-3 border-t border-gray-100 pt-3">
         <div>
-          <p className="text-sm text-gray-500">
-            আজকের দাম
-          </p>
+          <p className="text-sm text-gray-500">আজকের দাম</p>
 
           <p className="mt-1 text-xl font-extrabold text-gray-900">
             {toBengaliNumber(item.today)}{" "}
-            <span className="text-sm font-medium">
-              টাকা
-            </span>
+            <span className="text-sm font-medium">টাকা</span>
           </p>
         </div>
 
@@ -104,12 +92,7 @@ function ProductCard({ item }) {
   );
 }
 
-function ProductSection({
-  title,
-  subtitle,
-  products,
-  type,
-}) {
+function ProductSection({ title, subtitle, products, type }) {
   const isUp = type === "up";
 
   return (
@@ -118,26 +101,18 @@ function ProductSection({
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
-            <span
-              className={
-                isUp ? "text-green-600" : "text-red-500"
-              }
-            >
+            <span className={isUp ? "text-green-600" : "text-red-500"}>
               {isUp ? "↗" : "↘"}
             </span>{" "}
             {title}
           </h2>
 
-          <p className="mt-2 text-sm text-gray-500">
-            {subtitle}
-          </p>
+          <p className="mt-2 text-sm text-gray-500">{subtitle}</p>
         </div>
 
         <span
           className={`rounded-full px-3 py-1.5 text-sm font-semibold ${
-            isUp
-              ? "bg-green-50 text-green-700"
-              : "bg-red-50 text-red-600"
+            isUp ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"
           }`}
         >
           {toBengaliNumber(products.length)}টি পণ্য
@@ -148,29 +123,20 @@ function ProductSection({
       {products.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((item) => (
-            <ProductCard
-              key={item.id}
-              item={item}
-            />
+            <ProductCard key={item.id} item={item} />
           ))}
         </div>
       ) : (
         <div className="rounded-xl bg-gray-50 px-4 py-10 text-center">
-          <span className="text-4xl">
-            {isUp ? "📊" : "🛒"}
-          </span>
+          <span className="text-4xl">{isUp ? "📊" : "🛒"}</span>
 
           <p className="mt-3 font-medium text-gray-700">
             এই মুহূর্তে কোনো পণ্যের তথ্য পাওয়া যায়নি।
           </p>
 
-          <p className="mt-1 text-sm text-gray-500">
-            পরে আবার চেষ্টা করুন।
-          </p>
+          <p className="mt-1 text-sm text-gray-500">পরে আবার চেষ্টা করুন।</p>
         </div>
       )}
-
-    
     </section>
   );
 }
@@ -186,9 +152,7 @@ export default async function PriceSections() {
 
   const data = await res.json();
 
-  const products = Array.isArray(data)
-    ? data
-    : data.products || [];
+  const products = Array.isArray(data) ? data : data.products || [];
 
   const increasedProducts = products
     .filter((item) => item.change?.dir === "up")
@@ -208,7 +172,7 @@ export default async function PriceSections() {
         />
 
         <ProductSection
-          title="আজ দাম কমেছে" 
+          title="আজ দাম কমেছে"
           products={decreasedProducts}
           type="down"
         />

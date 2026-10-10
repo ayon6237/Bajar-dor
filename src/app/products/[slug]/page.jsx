@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -39,7 +38,6 @@ function getUnit(unit) {
 export default async function ProductDetailsPage({ params }) {
   const { slug } = await params;
 
-  // প্রথমে পণ্যের তালিকা থেকে slug অনুযায়ী পণ্য খুঁজব
   const listData = await fetchProductData(API_URL);
 
   const products = Array.isArray(listData)
@@ -56,12 +54,8 @@ export default async function ProductDetailsPage({ params }) {
     notFound();
   }
 
-  // এরপর নির্দিষ্ট পণ্যের বিস্তারিত তথ্য আনব
-  const productData = await fetchProductData(
-    `${API_URL}/${matchedProduct.id}`
-  );
+  const productData = await fetchProductData(`${API_URL}/${matchedProduct.id}`);
 
-  // API সরাসরি product অথবা { product: ... } ফেরত দিতে পারে
   const product = productData?.product || productData;
 
   if (!product || !product.id) {
@@ -93,22 +87,20 @@ export default async function ProductDetailsPage({ params }) {
           : (Number(market.min) + Number(market.max)) / 2,
     }))
     .filter(
-      (market) =>
-        Number.isFinite(market.min) &&
-        Number.isFinite(market.max)
+      (market) => Number.isFinite(market.min) && Number.isFinite(market.max),
     );
 
   const minMarket =
     marketPrices.length > 0
       ? marketPrices.reduce((min, market) =>
-          market.min < min.min ? market : min
+          market.min < min.min ? market : min,
         )
       : null;
 
   const maxMarket =
     marketPrices.length > 0
       ? marketPrices.reduce((max, market) =>
-          market.max > max.max ? market : max
+          market.max > max.max ? market : max,
         )
       : null;
 
@@ -172,9 +164,7 @@ export default async function ProductDetailsPage({ params }) {
 
             {/* Today's Price */}
             <div className="min-w-[150px] self-start rounded-2xl border border-gray-200 bg-gray-50 px-6 py-4 text-center md:self-center">
-              <p className="text-xs font-semibold text-gray-400">
-                আজকের দাম
-              </p>
+              <p className="text-xs font-semibold text-gray-400">আজকের দাম</p>
 
               <p className="mt-1 text-3xl font-black text-gray-900">
                 {toBengaliNumber(product.today)}
@@ -189,10 +179,7 @@ export default async function ProductDetailsPage({ params }) {
               >
                 <span aria-hidden="true">{changeIcon}</span>
                 <span>
-                  {toBengaliNumber(
-                    Math.abs(Number(change.pct) || 0)
-                  )}
-                  %
+                  {toBengaliNumber(Math.abs(Number(change.pct) || 0))}%
                 </span>
               </div>
             </div>
@@ -207,15 +194,10 @@ export default async function ProductDetailsPage({ params }) {
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {/* Minimum Price */}
           <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-medium text-gray-400">
-              সর্বনিম্ন দাম
-            </p>
+            <p className="text-xs font-medium text-gray-400">সর্বনিম্ন দাম</p>
 
             <p className="mt-2 text-2xl font-black text-green-700">
-              {toBengaliNumber(
-                minMarket ? minMarket.min : product.today
-              )}{" "}
-              টাকা
+              {toBengaliNumber(minMarket ? minMarket.min : product.today)} টাকা
             </p>
 
             <p className="mt-1 text-xs text-gray-500">
@@ -225,15 +207,10 @@ export default async function ProductDetailsPage({ params }) {
 
           {/* Maximum Price */}
           <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-medium text-gray-400">
-              সর্বাধিক দাম
-            </p>
+            <p className="text-xs font-medium text-gray-400">সর্বাধিক দাম</p>
 
             <p className="mt-2 text-2xl font-black text-red-600">
-              {toBengaliNumber(
-                maxMarket ? maxMarket.max : product.today
-              )}{" "}
-              টাকা
+              {toBengaliNumber(maxMarket ? maxMarket.max : product.today)} টাকা
             </p>
 
             <p className="mt-1 text-xs text-gray-500">
@@ -243,9 +220,7 @@ export default async function ProductDetailsPage({ params }) {
 
           {/* Average Price */}
           <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:col-span-2 lg:col-span-1">
-            <p className="text-xs font-medium text-gray-400">
-              গড় মূল্য
-            </p>
+            <p className="text-xs font-medium text-gray-400">গড় মূল্য</p>
 
             <p className="mt-2 text-2xl font-black text-gray-900">
               {toBengaliNumber(overallAvg)} টাকা

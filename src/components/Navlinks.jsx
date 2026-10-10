@@ -1,7 +1,6 @@
 import NavlinksClient from "./NavlinksClient";
 
-const API_URL =
-  "https://api.abcz.workers.dev/api/bazardor/categories";
+const API_URL = "https://api.abcz.workers.dev/api/bazardor/categories";
 
 const Navlinks = async () => {
   let categories = [];

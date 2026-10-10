@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -22,9 +21,7 @@ export default function AuthNavActions() {
       const result = await authClient.signOut();
 
       if (result.error) {
-        toast.error(
-          result.error.message || "Sign out করা যায়নি।"
-        );
+        toast.error(result.error.message || "Sign out করা যায়নি।");
         return;
       }
 
@@ -41,30 +38,21 @@ export default function AuthNavActions() {
     }
   }
 
-  // Session check হচ্ছে
   if (isPending) {
-    return (
-      <div className="h-9 w-24 animate-pulse rounded-lg bg-gray-200" />
-    );
+    return <div className="h-9 w-24 animate-pulse rounded-lg bg-gray-200" />;
   }
 
-  // Login করা থাকলে
   if (session?.user) {
     const user = session.user;
 
     return (
       <div className="flex items-center gap-2">
-        <Link
-          href="/profile"
-          className="max-w-36 text-right"
-        >
+        <Link href="/profile" className="max-w-36 text-right">
           <p className="truncate text-sm font-semibold text-gray-800">
             {user.name || "User"}
           </p>
 
-          <p className="truncate text-xs text-gray-500">
-            {user.email}
-          </p>
+          <p className="truncate text-xs text-gray-500">{user.email}</p>
         </Link>
 
         <button

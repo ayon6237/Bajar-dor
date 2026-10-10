@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-const API_URL =
-  "https://api.abcz.workers.dev/api/bazardor/products";
+const API_URL = "https://api.abcz.workers.dev/api/bazardor/products";
 
 function toBengaliNumber(value) {
   return new Intl.NumberFormat("bn-BD", {
@@ -21,7 +20,6 @@ function getUnit(unit) {
   return units[unit] || "প্রতি কেজি";
 }
 
-// দাম বাড়লে লাল down icon, কমলে সবুজ up icon
 function getChangeInfo(change) {
   const direction = change?.dir || "flat";
   const percentage = Number(change?.pct) || 0;
@@ -82,15 +80,11 @@ function ProductCard({ item }) {
       {/* Today's Price and Change */}
       <div className="mt-auto flex flex-wrap items-end justify-between gap-3 border-t border-gray-100 pt-3 sm:mt-4 sm:pt-4">
         <div className="min-w-0">
-          <p className="text-xs text-gray-500 sm:text-sm">
-            আজকের দাম
-          </p>
+          <p className="text-xs text-gray-500 sm:text-sm">আজকের দাম</p>
 
           <p className="mt-1 break-words text-lg font-extrabold text-gray-900 sm:text-xl">
             {toBengaliNumber(item.today)}{" "}
-            <span className="text-xs font-medium sm:text-sm">
-              টাকা
-            </span>
+            <span className="text-xs font-medium sm:text-sm">টাকা</span>
           </p>
         </div>
 
@@ -133,8 +127,8 @@ export default async function ProductsPage() {
           </h1>
 
           <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-500 sm:text-base">
-            নিত্যপ্রয়োজনীয় পণ্যের আজকের বাজারদর ও দামের পরিবর্তন
-            এক নজরে দেখে নিন।
+            নিত্যপ্রয়োজনীয় পণ্যের আজকের বাজারদর ও দামের পরিবর্তন এক নজরে দেখে
+            নিন।
           </p>
 
           <div className="mt-4 inline-flex max-w-full items-center rounded-full bg-white px-3 py-2 text-xs font-medium text-gray-600 shadow-sm sm:px-4 sm:text-sm">
@@ -146,10 +140,7 @@ export default async function ProductsPage() {
         {products.length > 0 ? (
           <div className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5">
             {products.map((item, index) => (
-              <ProductCard
-                key={item.id ?? item.slug ?? index}
-                item={item}
-              />
+              <ProductCard key={item.id ?? item.slug ?? index} item={item} />
             ))}
           </div>
         ) : (

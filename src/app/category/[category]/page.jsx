@@ -11,15 +11,11 @@ export default async function CategoryPage({ params }) {
       cache: "no-store",
     }),
 
-    fetch(
-      `${API_URL}/products?category=${encodeURIComponent(category)}`,
-      {
-        cache: "no-store",
-      }
-    ),
+    fetch(`${API_URL}/products?category=${encodeURIComponent(category)}`, {
+      cache: "no-store",
+    }),
   ]);
 
-  // API error হলে 404 নয়, error boundary দেখাবে
   if (!categoryRes.ok || !productRes.ok) {
     throw new Error("পণ্যের তথ্য লোড করা যায়নি।");
   }
@@ -29,14 +25,12 @@ export default async function CategoryPage({ params }) {
     productRes.json(),
   ]);
 
-  // Category list normalize করা
   const categories = Array.isArray(categoryData)
     ? categoryData
     : Array.isArray(categoryData?.categories)
       ? categoryData.categories
       : [];
 
-  // Product list normalize করা
   const products = Array.isArray(productData)
     ? productData
     : Array.isArray(productData?.products)
@@ -45,12 +39,8 @@ export default async function CategoryPage({ params }) {
         ? productData.data
         : [];
 
-  // URL-এর category slug বৈধ কি না যাচাই
-  const currentCategory = categories.find(
-    (item) => item.slug === category
-  );
+  const currentCategory = categories.find((item) => item.slug === category);
 
-  // Category না থাকলে 404 page
   if (!currentCategory) {
     notFound();
   }

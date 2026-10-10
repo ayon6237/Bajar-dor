@@ -1,7 +1,6 @@
 import MarqueeText from "react-marquee-text";
 
-const API_URL =
-  "https://api.abcz.workers.dev/api/bazardor/products";
+const API_URL = "https://api.abcz.workers.dev/api/bazardor/products";
 
 async function getProducts() {
   const res = await fetch(API_URL, {
@@ -33,34 +32,25 @@ function MarqueeItem({ item }) {
   const pct = Number(item.change?.pct) || 0;
 
   const changeStyle =
-    pct < 0
-      ? "text-red-500"
-      : pct > 0
-        ? "text-green-600"
-        : "text-gray-400";
+    pct < 0 ? "text-red-500" : pct > 0 ? "text-green-600" : "text-gray-400";
 
-  const changeIcon =
-    pct < 0 ? "↓" : pct > 0 ? "↑" : "→";
+  const changeIcon = pct < 0 ? "↓" : pct > 0 ? "↑" : "→";
 
   return (
     <div className="flex shrink-0 items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 shadow-sm transition hover:border-green-200 hover:shadow sm:gap-2 sm:px-4 sm:py-2">
-      {/* Product Icon */}
       <span className="shrink-0 text-base sm:text-lg">
         {item.image || item.categoryIcon || "🛒"}
       </span>
 
-      {/* Product Name */}
       <span className="whitespace-nowrap text-[11px] font-medium text-gray-700 sm:text-xs">
         {item.nameBn || "পণ্য"}
       </span>
 
-      {/* Today's Price */}
       <span className="whitespace-nowrap text-[11px] font-bold text-green-600 sm:text-xs">
         {item.today ?? "—"} টাকা
         {item.unit ? `/${item.unit}` : ""}
       </span>
 
-      {/* Price Change */}
       <span
         className={`flex shrink-0 items-center gap-0.5 whitespace-nowrap text-[11px] font-semibold sm:text-xs ${changeStyle}`}
       >

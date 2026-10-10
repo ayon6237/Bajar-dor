@@ -20,16 +20,13 @@ const Hero = () => {
             {/* Heading */}
             <h1 className="max-w-xl text-3xl font-extrabold leading-snug tracking-tight text-gray-900 sm:text-4xl sm:leading-tight lg:text-5xl">
               আজকের বাজারের দাম
-              <span className="mt-1 block text-green-600">
-                এক নজরে
-              </span>
+              <span className="mt-1 block text-green-600">এক নজরে</span>
             </h1>
 
             {/* Description */}
             <p className="mt-4 max-w-lg text-sm leading-7 text-gray-600 sm:mt-5 sm:text-base sm:leading-8">
-              চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম —
-              বাজারভিত্তিক বিস্তারিত, গড়, সর্বনিম্ন-সর্বাধিক এবং
-              দামের পরিবর্তন এক জায়গায়।
+              চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক
+              বিস্তারিত, গড়, সর্বনিম্ন-সর্বাধিক এবং দামের পরিবর্তন এক জায়গায়।
             </p>
 
             {/* CTA Button */}

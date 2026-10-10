@@ -13,7 +13,6 @@ const NavlinksClient = ({ categories }) => {
           {categories.map((item) => {
             const href = `/category/${item.slug}`;
 
-            // বর্তমান category active কি না
             const isActive = pathname === href;
 
             return (
