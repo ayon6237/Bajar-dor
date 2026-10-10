@@ -1,4 +1,5 @@
 
+import { notFound } from "next/navigation";
 import CategoryContent from "./CategoryContent";
 
 export const instant = false;
@@ -18,7 +19,10 @@ export default async function CategoryPage({ params }) {
         cache: "no-store",
       }
     ),
+
   ]);
+
+  
 
   if (!categoryRes.ok || !productRes.ok) {
     throw new Error("পণ্যের তথ্য লোড করা যায়নি।");
