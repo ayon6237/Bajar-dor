@@ -1,30 +1,41 @@
+
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 
 export default function AuthNavActions() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
+
   const [loading, setLoading] = useState(false);
 
   async function handleSignOut() {
+    if (loading) return;
+
     setLoading(true);
 
     try {
       const result = await authClient.signOut();
 
       if (result.error) {
-        alert(result.error.message || "Sign out করা যায়নি।");
+        toast.error(
+          result.error.message || "Sign out করা যায়নি।"
+        );
         return;
       }
 
-      router.push("/");
+      toast.success("সফলভাবে Sign out হয়েছে!");
+
+      router.replace("/");
       router.refresh();
     } catch (error) {
-      alert("Sign out করতে সমস্যা হয়েছে। আবার চেষ্টা করো।");
+      console.error("Sign out error:", error);
+
+      toast.error("Sign out করতে সমস্যা হয়েছে। আবার চেষ্টা করো।");
     } finally {
       setLoading(false);
     }
@@ -43,8 +54,10 @@ export default function AuthNavActions() {
 
     return (
       <div className="flex items-center gap-2">
-        <Link href="/profile">
-        <div className="max-w-36 text-right">
+        <Link
+          href="/profile"
+          className="max-w-36 text-right"
+        >
           <p className="truncate text-sm font-semibold text-gray-800">
             {user.name || "User"}
           </p>
@@ -52,14 +65,13 @@ export default function AuthNavActions() {
           <p className="truncate text-xs text-gray-500">
             {user.email}
           </p>
-        </div>
         </Link>
 
         <button
           type="button"
           onClick={handleSignOut}
           disabled={loading}
-          className="rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:opacity-60"
+          className="rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading ? "Signing out..." : "Sign Out"}
         </button>

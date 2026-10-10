@@ -1,8 +1,10 @@
+
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 
 export default function ProfilePage() {
@@ -19,32 +21,62 @@ export default function ProfilePage() {
   async function handleUpdateProfile(e) {
     e.preventDefault();
 
+    if (loading) return;
+
     setMessage("");
     setError("");
+
+    const updatedName = name.trim();
+
+    if (!updatedName) {
+      const errorText = "আপনার নাম লিখুন।";
+      setError(errorText);
+      toast.error(errorText);
+      return;
+    }
+
     setLoading(true);
 
     try {
       const result = await authClient.updateUser({
-        name: name.trim(),
+        name: updatedName,
       });
 
       if (result.error) {
-        setError(
-          result.error.message || "নাম আপডেট করা যায়নি।"
-        );
+        const errorText =
+          result.error.message || "নাম আপডেট করা যায়নি।";
+
+        setError(errorText);
+        toast.error(errorText);
         return;
       }
 
-      setMessage("তোমার নাম সফলভাবে আপডেট হয়েছে।");
+      const successText = "তোমার নাম সফলভাবে আপডেট হয়েছে।";
+
+      setMessage(successText);
       setEditing(false);
+      setName(updatedName);
+
+      toast.success(successText);
+
+      // Updated session data আনার চেষ্টা
+      await authClient.getSession();
+      router.refresh();
     } catch (err) {
-      setError("প্রোফাইল আপডেট করতে সমস্যা হয়েছে।");
+      console.error("Profile update error:", err);
+
+      const errorText = "প্রোফাইল আপডেট করতে সমস্যা হয়েছে।";
+
+      setError(errorText);
+      toast.error(errorText);
     } finally {
       setLoading(false);
     }
   }
 
   async function handleSignOut() {
+    if (loading) return;
+
     setLoading(true);
     setError("");
 
@@ -52,14 +84,25 @@ export default function ProfilePage() {
       const result = await authClient.signOut();
 
       if (result.error) {
-        setError(result.error.message || "Sign out করা যায়নি।");
+        const errorText =
+          result.error.message || "Sign out করা যায়নি।";
+
+        setError(errorText);
+        toast.error(errorText);
         return;
       }
+
+      toast.success("সফলভাবে Sign out হয়েছে!");
 
       router.replace("/login");
       router.refresh();
     } catch (err) {
-      setError("Sign out করতে সমস্যা হয়েছে।");
+      console.error("Sign out error:", err);
+
+      const errorText = "Sign out করতে সমস্যা হয়েছে।";
+
+      setError(errorText);
+      toast.error(errorText);
     } finally {
       setLoading(false);
     }
@@ -135,7 +178,8 @@ export default function ProfilePage() {
           </h1>
 
           <p className="mt-2 text-sm text-gray-500">
-আপনার অ্যাকাউন্টের তথ্য এখানে দেখুন।          </p>
+            আপনার অ্যাকাউন্টের তথ্য এখানে দেখুন।
+          </p>
         </div>
 
         {/* Profile Card */}
@@ -236,7 +280,8 @@ export default function ProfilePage() {
                     onChange={(e) => setName(e.target.value)}
                     required
                     maxLength={100}
-                    className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
+                    disabled={loading}
+                    className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 disabled:opacity-60"
                   />
                 </div>
 
@@ -251,12 +296,13 @@ export default function ProfilePage() {
 
                   <button
                     type="button"
+                    disabled={loading}
                     onClick={() => {
                       setEditing(false);
                       setError("");
                       setName(user.name || "");
                     }}
-                    className="rounded-lg border border-gray-200 px-5 py-3 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
+                    className="rounded-lg border border-gray-200 px-5 py-3 text-sm font-semibold text-gray-600 transition hover:bg-gray-50 disabled:opacity-60"
                   >
                     Cancel
                   </button>
@@ -323,9 +369,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Footer */}
-        <p className="mt-5 text-center text-xs text-gray-400">
-          তোমার BazarDor অ্যাকাউন্ট, তোমার নিয়ন্ত্রণে।
-        </p>
+       
       </div>
     </main>
   );
