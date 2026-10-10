@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import CurrentDate from "./CurrentDate";
 
 const Hero = () => {
@@ -35,13 +34,13 @@ const Hero = () => {
 
             {/* CTA Button */}
             <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-7 sm:gap-4">
-              <Link
-                href="/products"
+              <a
+                href="#products"
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition duration-200 hover:bg-green-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 sm:px-6 sm:text-base"
               >
                 সব পণ্য দেখুন
                 <span aria-hidden="true">→</span>
-              </Link>
+              </a>
             </div>
           </div>
 

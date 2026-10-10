@@ -124,7 +124,7 @@ export default async function ProductsPage() {
         : [];
 
   return (
-    <main className="min-h-screen w-full bg-gray-50">
+    <main id="products" className="scroll-mt-4 min-h-screen w-full bg-gray-50">
       <div className="mx-auto w-full max-w-[1200px] px-3 py-6 sm:px-5 sm:py-8 md:px-6 lg:py-10">
         {/* Page Header */}
         <div className="mb-6 sm:mb-8">
