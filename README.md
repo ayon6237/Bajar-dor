@@ -6,8 +6,8 @@ The project is built with Next.js and Tailwind CSS, with product and category in
 
 ## 🌐 Live Demo
 
-- **Live Website:** [Add your deployed website URL here]
-- **GitHub Repository:** [Add your GitHub repository URL here]
+- **Live Website:** https://bajar-dor-jade.vercel.app/
+- **GitHub Repository:** https://github.com/ayon6237/Bajar-dor
 
 ## ✨ Features
 
@@ -99,15 +99,13 @@ Make sure you have installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/ayon6237/Bajar-dor
 ```
-
-Replace `YOUR_GITHUB_REPOSITORY_URL` with your actual repository URL.
 
 ### 2. Navigate to the Project
 
 ```bash
-cd your-project-folder
+cd my-app
 ```
 
 ### 3. Install Dependencies
@@ -223,8 +221,8 @@ The application can be deployed on Vercel.
 
 **Ayon Banerjee**
 
-- GitHub: [Add your GitHub profile URL]
-- LinkedIn: [Add your LinkedIn profile URL]
+- GitHub: https://github.com/ayon6237/Bajar-dor
+- LinkedIn: https://www.linkedin.com/in/ayon-banerjee-ab672324b/
 
 ## 📄 License
 
